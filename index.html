@@ -102,6 +102,27 @@
       padding-bottom: 10px;
     }
 
+    #installBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+      transition: background 0.2s, transform 0.1s;
+      z-index: 1000;
+    }
+
+    #installBtn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
     /******** FILE LIST ********/
     .file-list {
       list-style: none;
@@ -277,6 +298,16 @@ window.addEventListener('beforeinstallprompt', (e) => {
     deferredPrompt = null;
   });
 });
+// Vérifie si la PWA est déjà installée
+window.addEventListener('appinstalled', () => {
+  const installBtn = document.getElementById('installBtn');
+  installBtn.style.display = 'none';
+});
+
+// Sur certains navigateurs, tu peux aussi vérifier la propriété navigator.standalone (iOS)
+if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+  document.getElementById('installBtn').style.display = 'none';
+}
 
   </script>
 
