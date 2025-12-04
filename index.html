@@ -205,6 +205,7 @@
     <h2>Documents disponibles</h2>
     <ul class="file-list" id="fileList"></ul>
     <iframe id="previewFrame"></iframe>
+    <button id="installBtn" style="display:none;">Installer l’application</button>
   </main>
 
   <script>
@@ -258,6 +259,25 @@
       li.appendChild(btn);
       list.appendChild(li);
     });
+    let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault(); // Empêche l'installation automatique
+  deferredPrompt = e;
+
+  // Affiche ton bouton ou lien d'installation
+  const installBtn = document.getElementById('installBtn');
+  installBtn.style.display = 'inline-block';
+  
+  installBtn.addEventListener('click', async () => {
+    installBtn.style.display = 'none';
+    deferredPrompt.prompt(); // Affiche la boîte de dialogue d'installation
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`L'utilisateur a choisi : ${outcome}`);
+    deferredPrompt = null;
+  });
+});
+
   </script>
 
   <script>
