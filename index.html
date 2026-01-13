@@ -284,28 +284,25 @@
     let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault(); // Empêche l'installation automatique
+  e.preventDefault();
   deferredPrompt = e;
 
-  // Affiche ton bouton ou lien d'installation
   const installBtn = document.getElementById('installBtn');
   installBtn.style.display = 'inline-block';
   
   installBtn.addEventListener('click', async () => {
     installBtn.style.display = 'none';
-    deferredPrompt.prompt(); // Affiche la boîte de dialogue d'installation
+    deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     console.log(`L'utilisateur a choisi : ${outcome}`);
     deferredPrompt = null;
   });
 });
-// Vérifie si la PWA est déjà installée
 window.addEventListener('appinstalled', () => {
   const installBtn = document.getElementById('installBtn');
   installBtn.style.display = 'none';
 });
 
-// Sur certains navigateurs, tu peux aussi vérifier la propriété navigator.standalone (iOS)
 if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
   document.getElementById('installBtn').style.display = 'none';
 }
