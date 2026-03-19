@@ -3,211 +3,526 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#333333">
+  <meta name="theme-color" content="#0a0a0f">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PhiloHub – Fiches de Révision</title>
   <link rel="icon" type="image/png" href="icons/icon-512.png">
   <link rel="apple-touch-icon" href="icons/icon-512.png">
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #0f0f0f;
-      --fg: #ffffff;
-      --card-bg: #1c1c1c;
-      --accent: #4da3ff;
-      --accent-hover: #6bb6ff;
+      --bg: #0a0a0f;
+      --bg2: #12121a;
+      --fg: #e8e4dc;
+      --fg-muted: rgba(232, 228, 220, 0.45);
+      --card-bg: #14141e;
+      --accent: #c9a96e;
+      --accent2: #7c6af5;
+      --border: rgba(201, 169, 110, 0.12);
+      --border-hover: rgba(201, 169, 110, 0.4);
+      --shadow: 0 20px 60px -10px rgba(0,0,0,0.6);
+      --glow: 0 0 40px rgba(201, 169, 110, 0.08);
+      --radius: 16px;
     }
 
     [data-theme="light"] {
-      --bg: #f0f2f5;
-      --fg: #000000;
-      --card-bg: #ffffff;
-      --accent: #0077cc;
-      --accent-hover: #2a8de0;
+      --bg: #f5f0e8;
+      --bg2: #ede7d8;
+      --fg: #1a1612;
+      --fg-muted: rgba(26, 22, 18, 0.45);
+      --card-bg: #faf7f2;
+      --accent: #9a6e2a;
+      --accent2: #5046c8;
+      --border: rgba(154, 110, 42, 0.15);
+      --border-hover: rgba(154, 110, 42, 0.5);
+      --shadow: 0 20px 60px -10px rgba(0,0,0,0.12);
+      --glow: 0 0 40px rgba(154, 110, 42, 0.06);
     }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: "Inter", sans-serif;
+      font-family: "DM Sans", sans-serif;
       background: var(--bg);
       color: var(--fg);
-      margin: 0;
-      padding: 0;
-      transition: background 0.3s, color 0.3s;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.4s ease, color 0.4s ease;
     }
 
-    /******** HEADER ********/
+    /* ── BACKGROUND TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(201,169,110,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(124,106,245,0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
     header {
-      background: var(--card-bg);
-      padding: 20px 25px;
-      display: flex;
-      justify-content: center;      
-      align-items: center;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 100;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s ease;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 1.6rem;
-      font-weight: 700;
-      flex : 1;
+    [data-theme="light"] header {
+      background: rgba(245, 240, 232, 0.88);
     }
+
     .header-logo {
       display: flex;
       align-items: center;
-      gap: 12px;
-      justify-content: center;
-      flex: 1;
+      gap: 14px;
     }
 
-    .header-logo img {
-      width: 32px;
-      height: 32px;
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Playfair Display", serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -1px;
+      flex-shrink: 0;
+    }
+
+    .logo-img {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .logo-text .name {
+      font-family: "Playfair Display", serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .logo-text .tagline {
+      font-size: 0.65rem;
+      font-weight: 300;
+      color: var(--fg-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .doc-count {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--fg-muted);
+      background: var(--border);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
     }
 
     #themeToggle {
-      background: var(--accent);
-      border: none;
-      color: white;
-      padding: 10px 16px;
-      border-radius: 8px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--fg-muted);
+      padding: 7px 14px;
+      border-radius: 20px;
       cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     #themeToggle:hover {
-      background: var(--accent-hover);
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(201,169,110,0.06);
     }
 
-    /******** MAIN ********/
-    main {
-      max-width: 900px;
-      margin: 30px auto;
-      background: var(--card-bg);
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: 52px 5% 0;
+      max-width: 1040px;
+      margin: 0 auto;
     }
 
-    h2 {
-      margin-top: 0;
-      font-size: 1.4rem;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding-bottom: 10px;
-    }
-
-    #installBtn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 10px;
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
       font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-      transition: background 0.2s, transform 0.1s;
-      z-index: 1000;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 14px;
     }
 
-    #installBtn:hover {
-      background: var(--accent-hover);
-      transform: translateY(-2px);
+    .hero-label::before {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
     }
 
-    /******** FILE LIST ********/
+    .hero h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero p {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--fg-muted);
+      max-width: 480px;
+    }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1040px;
+      margin: 28px auto 0;
+      padding: 0 5%;
+    }
+
+    .search-inner {
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--fg-muted);
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+
+    #searchInput {
+      width: 100%;
+      padding: 13px 16px 13px 42px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--fg);
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    #searchInput::placeholder { color: var(--fg-muted); }
+
+    #searchInput:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(201,169,110,0.1);
+    }
+
+    /* ── MAIN ── */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1040px;
+      margin: 24px auto 60px;
+      padding: 0 5%;
+    }
+
+    /* ── FILE LIST ── */
     .file-list {
       list-style: none;
-      padding: 0;
-      margin: 20px 0;
+      display: grid;
+      gap: 10px;
     }
 
     .file-list li {
-      background: rgba(255,255,255,0.04);
-      margin: 12px 0;
-      padding: 14px 18px;
-      border-radius: 10px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      transition: background 0.25s, transform 0.1s;
+      gap: 16px;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+      animation: slideUp 0.4s ease both;
     }
 
     .file-list li:hover {
-      background: rgba(255,255,255,0.07);
-      transform: translateY(-2px);
+      border-color: var(--border-hover);
+      box-shadow: var(--glow);
+      transform: translateY(-1px);
     }
 
-    .file-list a {
-      text-decoration: none;
-      color: var(--accent);
-      font-weight: 600;
-      word-break: break-all;
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .file-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(201,169,110,0.15), rgba(124,106,245,0.1));
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
       font-size: 1rem;
     }
 
-    /******** BUTTONS ********/
-    .preview-btn {
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
+    .file-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .file-info a {
+      text-decoration: none;
+      color: var(--fg);
+      font-weight: 500;
+      font-size: 0.95rem;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.2s;
+    }
+
+    .file-info a:hover { color: var(--accent); }
+
+    .file-meta {
+      font-size: 0.72rem;
+      color: var(--fg-muted);
+      font-weight: 300;
+      margin-top: 1px;
+    }
+
+    .file-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 9px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.8rem;
       font-weight: 600;
-      transition: background 0.2s;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      letter-spacing: 0.2px;
     }
 
-    .preview-btn:hover {
-      background: var(--accent-hover);
+    .btn-preview {
+      background: rgba(201,169,110,0.12);
+      color: var(--accent);
+      border-color: rgba(201,169,110,0.25);
     }
 
-    /******** IFRAME ********/
+    .btn-preview:hover {
+      background: rgba(201,169,110,0.22);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .btn-print {
+      background: rgba(124,106,245,0.1);
+      color: var(--accent2);
+      border-color: rgba(124,106,245,0.22);
+    }
+
+    .btn-print:hover {
+      background: rgba(124,106,245,0.2);
+      border-color: var(--accent2);
+      transform: translateY(-1px);
+    }
+
+    .btn svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    /* ── PREVIEW PANEL ── */
+    #previewContainer {
+      display: none;
+      margin-top: 24px;
+      animation: fadeIn 0.35s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .preview-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--fg-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preview-title .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .btn-close-preview {
+      background: rgba(255,80,80,0.1);
+      border: 1px solid rgba(255,80,80,0.2);
+      color: rgba(255,100,100,0.8);
+      padding: 5px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-close-preview:hover {
+      background: rgba(255,80,80,0.2);
+      border-color: rgba(255,80,80,0.5);
+    }
+
     iframe {
       width: 100%;
-      height: 70vh;
-      border: none;
-      margin-top: 25px;
-      display: none;
-      border-radius: 12px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+      height: 72vh;
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius);
+      display: block;
     }
 
-    /******** RESPONSIVE ********/
-    @media (max-width: 700px) {
-      header {
-        flex-direction: column;
-        gap: 12px;
-        padding: 15px;
-      }
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--fg-muted);
+      display: none;
+    }
 
-      main {
-        margin: 15px;
-        padding: 18px;
-      }
+    .empty-state svg { margin-bottom: 12px; opacity: 0.3; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* ── INSTALL BTN ── */
+    #installBtn {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      border: none;
+      padding: 13px 28px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      box-shadow: 0 10px 30px rgba(201,169,110,0.25);
+      z-index: 1000;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      display: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    #installBtn:hover {
+      transform: translateX(-50%) translateY(-2px);
+      box-shadow: 0 16px 40px rgba(201,169,110,0.35);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .hero { padding: 36px 5% 0; }
+      .doc-count { display: none; }
 
       .file-list li {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-        padding: 16px;
+        flex-wrap: wrap;
       }
 
-      .file-list a {
-        font-size: 1.05rem;
+      .file-actions {
+        width: 100%;
       }
 
-      h1 {
-        font-size: 1.4rem;
-      }
+      .btn { flex: 1; justify-content: center; }
+
+      #themeToggle span { display: none; }
     }
   </style>
 </head>
@@ -215,110 +530,194 @@
 <body>
   <header>
     <div class="header-logo">
-      <img src="icons/icon-512.png" alt="Logo">
-      <h1>PhiloHub</h1>
+      <img src="icons/icon-512.png" alt="Logo" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="logo-mark" style="display:none;">Φ</div>
+      <div class="logo-text">
+        <span class="name">PhiloHub</span>
+        <span class="tagline">Fiches de révision</span>
+      </div>
     </div>
-    <button id="themeToggle">Mode clair</button>
+    <div class="header-right">
+      <span class="doc-count" id="docCountBadge">13 documents</span>
+      <button id="themeToggle">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <span>Mode clair</span>
+      </button>
+    </div>
   </header>
 
+  <section class="hero">
+    <div class="hero-label">Philosophie · Terminale</div>
+    <h1>Vos fiches,<br><em>toujours disponibles.</em></h1>
+    <p>Accédez à l'ensemble des documents de révision, consultez-les en aperçu ou imprimez-les en un clic.</p>
+  </section>
+
+  <div class="search-wrap">
+    <div class="search-inner">
+      <span class="search-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </span>
+      <input type="text" id="searchInput" placeholder="Rechercher une fiche…" autocomplete="off">
+    </div>
+  </div>
 
   <main>
-    <h2>Documents disponibles</h2>
     <ul class="file-list" id="fileList"></ul>
-    <iframe id="previewFrame"></iframe>
-    <button id="installBtn" style="display:none;">Installer l’application</button>
+    <div class="empty-state" id="emptyState">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <p>Aucun document trouvé</p>
+    </div>
+
+    <div id="previewContainer">
+      <div class="preview-header">
+        <span class="preview-title">
+          <span class="dot"></span>
+          <span id="currentFileTitle">Aperçu</span>
+        </span>
+        <button class="btn-close-preview" id="closePreview">✕ Fermer</button>
+      </div>
+      <iframe id="previewFrame" title="Aperçu du document"></iframe>
+    </div>
   </main>
+
+  <button id="installBtn">⬇ Installer l'application</button>
 
   <script>
     const supportedDocs = [
-      "Philosophe.docx",
-      "Dissertation.docx",      
-      "Étymons.docx",
-      "Explication de texte.docx",
-      "Conscience et inconscience.docx",
-      "Philosophie.docx",
-      "Art.docx",
-      "Travail.docx",
-      "Nature.docx",
-	  "Vérité.docx",
-	  "Religion.docx",
-	  "Langage.docx",
-	  "Technique.docx"
+      { name: "Philosophe",                emoji: "🧠" },
+      { name: "Dissertation",              emoji: "✍️" },
+      { name: "Étymons",                   emoji: "🔤" },
+      { name: "Explication de texte",      emoji: "📖" },
+      { name: "Conscience et inconscience",emoji: "💭" },
+      { name: "Philosophie",               emoji: "⚖️" },
+      { name: "Art",                       emoji: "🎨" },
+      { name: "Travail",                   emoji: "⚒️" },
+      { name: "Nature",                    emoji: "🌿" },
+      { name: "Vérité",                    emoji: "🔍" },
+      { name: "Religion",                  emoji: "✨" },
+      { name: "Langage",                   emoji: "💬" },
+      { name: "Technique",                 emoji: "⚙️" },
     ];
 
-    const list = document.getElementById("fileList");
-    const iframe = document.getElementById("previewFrame");
-    const toggleBtn = document.getElementById("themeToggle");
-    const html = document.documentElement;
+    const list        = document.getElementById("fileList");
+    const iframe      = document.getElementById("previewFrame");
+    const previewEl   = document.getElementById("previewContainer");
+    const titleEl     = document.getElementById("currentFileTitle");
+    const searchInput = document.getElementById("searchInput");
+    const emptyState  = document.getElementById("emptyState");
+    const html        = document.documentElement;
 
-    function updateToggleText() {
-      toggleBtn.textContent =
-        html.dataset.theme === "dark" ? "Mode clair" : "Mode sombre";
+    // ── THEME ──
+    const toggleBtn = document.getElementById("themeToggle");
+    toggleBtn.addEventListener("click", () => {
+      const isDark = html.dataset.theme === "dark";
+      html.dataset.theme = isDark ? "light" : "dark";
+      toggleBtn.querySelector("span").textContent = isDark ? "Mode sombre" : "Mode clair";
+    });
+
+    // ── CLOSE PREVIEW ──
+    document.getElementById("closePreview").addEventListener("click", () => {
+      previewEl.style.display = "none";
+      iframe.src = "";
+    });
+
+    // ── RENDER LIST ──
+    function renderList(filter = "") {
+      list.innerHTML = "";
+      const filtered = supportedDocs.filter(d =>
+        d.name.toLowerCase().includes(filter.toLowerCase())
+      );
+
+      emptyState.style.display = filtered.length === 0 ? "block" : "none";
+
+      filtered.forEach((doc, i) => {
+        const file = doc.name + ".docx";
+
+        const li = document.createElement("li");
+        li.style.animationDelay = `${i * 35}ms`;
+
+        // Icon
+        const icon = document.createElement("div");
+        icon.className = "file-icon";
+        icon.textContent = doc.emoji;
+
+        // Info
+        const info = document.createElement("div");
+        info.className = "file-info";
+
+        const link = document.createElement("a");
+        link.href = file;
+        link.textContent = doc.name;
+        link.target = "_blank";
+
+        const meta = document.createElement("div");
+        meta.className = "file-meta";
+        meta.textContent = "Document Word · .docx";
+
+        info.appendChild(link);
+        info.appendChild(meta);
+
+        // Actions
+        const actions = document.createElement("div");
+        actions.className = "file-actions";
+
+        // Preview button
+        const previewBtn = document.createElement("button");
+        previewBtn.className = "btn btn-preview";
+        previewBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Aperçu`;
+        previewBtn.onclick = () => {
+          const fullUrl = location.href.replace(/\/[^/]*$/, '/') + encodeURIComponent(file);
+          iframe.src = `https://view.officeapps.live.com/op/embed.aspx?src=${fullUrl}`;
+          previewEl.style.display = "block";
+          titleEl.textContent = doc.name;
+          previewEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        // Print button
+        const printBtn = document.createElement("button");
+        printBtn.className = "btn btn-print";
+        printBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Imprimer`;
+        printBtn.onclick = () => {
+          const fullUrl = location.href.replace(/\/[^/]*$/, '/') + encodeURIComponent(file);
+          const printUrl = `https://view.officeapps.live.com/op/view.aspx?src=${fullUrl}&action=print`;
+          window.open(printUrl, '_blank');
+        };
+
+        actions.appendChild(previewBtn);
+        actions.appendChild(printBtn);
+
+        li.appendChild(icon);
+        li.appendChild(info);
+        li.appendChild(actions);
+        list.appendChild(li);
+      });
     }
 
-    toggleBtn.addEventListener("click", () => {
-      html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
-      updateToggleText();
-    });
+    renderList();
 
-    updateToggleText();
+    // ── SEARCH ──
+    searchInput.addEventListener("input", () => renderList(searchInput.value));
 
-    supportedDocs.forEach(file => {
-      const li = document.createElement("li");
-
-      const link = document.createElement("a");
-      link.href = file;
-      link.textContent = file;
-      link.target = "_blank";
-
-      const btn = document.createElement("button");
-      btn.textContent = "Aperçu";
-      btn.className = "preview-btn";
-      btn.onclick = () => {
-        iframe.src =
-          `https://view.officeapps.live.com/op/embed.aspx?src=` +
-          encodeURIComponent(location.href.replace(/\/[^/]*$/, '/' + file));
-        iframe.style.display = "block";
-      };
-
-      li.appendChild(link);
-      li.appendChild(btn);
-      list.appendChild(li);
-    });
+    // ── PWA ──
     let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installBtn').style.display = 'block';
+    });
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
+    document.getElementById('installBtn').addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        document.getElementById('installBtn').style.display = 'none';
+      }
+    });
 
-  const installBtn = document.getElementById('installBtn');
-  installBtn.style.display = 'inline-block';
-  
-  installBtn.addEventListener('click', async () => {
-    installBtn.style.display = 'none';
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(`L'utilisateur a choisi : ${outcome}`);
-    deferredPrompt = null;
-  });
-});
-window.addEventListener('appinstalled', () => {
-  const installBtn = document.getElementById('installBtn');
-  installBtn.style.display = 'none';
-});
-
-if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-  document.getElementById('installBtn').style.display = 'none';
-}
-
-  </script>
-
-  <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("service-worker.js")
-          .then(reg => console.log("SW registered", reg))
-          .catch(err => console.error("SW registration failed", err));
+        navigator.serviceWorker.register("service-worker.js").catch(console.error);
       });
     }
   </script>
